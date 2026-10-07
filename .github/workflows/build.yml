@@ -1,0 +1,39 @@
+name: Build ELDOVANT Shop
+
+# Regenerates every page, the SEO blocks, sitemap.xml and robots.txt whenever the catalogue,
+# the artwork or the build script changes, then commits the result.
+# Pages keeps publishing straight from the branch ("Deploy from a branch").
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'shop-data.js'
+      - 'assets/**'
+      - 'tools/build.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: eldovant-shop-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate (fails the run, and changes nothing, on bad data / missing image / broken link)
+        run: node tools/build.mjs --check
+      - name: Build
+        run: node tools/build.mjs
+      - name: Commit generated files
+        run: |
+          git config user.name  "eldovant-build"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "Nothing to commit."; else git commit -m "build: regenerate shop pages, SEO and sitemap"; git push; fi

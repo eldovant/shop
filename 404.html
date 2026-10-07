@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ELDOVANT Shop — 404</title>
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="/favicon.ico" sizes="48x48 96x96 144x144">
+<link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="48x48">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  var t=null; try{t=localStorage.getItem('eld-theme')}catch(e){}
+  if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark'}
+  d.setAttribute('data-theme',t);
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('rm');
+  /* language of a 404: the URL prefix first, then the saved choice, then the browser, then English */
+  var l=null, m=/^\/(en|it)(\/|$)/.exec(location.pathname); if(m) l=m[1];
+  if(!l){ try{var s=localStorage.getItem('eld-lang'); if(s==='it'||s==='en') l=s}catch(e){} }
+  if(!l){ var list=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'en']; for(var i=0;i<list.length&&!l;i++){var k=/^(it|en)\b/i.exec(list[i]||''); if(k) l=k[1].toLowerCase();} }
+  d.lang=l||'en';
+})();
+</script>
+<link rel="stylesheet" href="/shop.css">
+<style>html[lang="en"] [data-l="it"],html[lang="it"] [data-l="en"]{display:none!important}</style>
+</head>
+<body>
+<header class="hdr always"><a class="brand" href="/" aria-label="ELDOVANT Shop"><img class="brand-e dk" src="/assets/brand/brand-e-dk.webp" alt="" width="200" height="215"><img class="brand-e lt" src="/assets/brand/brand-e-lt.webp" alt="" width="200" height="215"><img class="brand-w dk" src="/assets/brand/brand-w-dk.webp" alt="ELDOVANT" width="1070" height="117"><img class="brand-w lt" src="/assets/brand/brand-w-lt.webp" alt="ELDOVANT" width="1070" height="117"></a>
+<div class="hdr-ctl"><button class="ibtn" id="btnTheme" type="button" aria-label="Switch to light mode"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg></button></div></header>
+<main id="main">
+<section class="void" lang="en" data-l="en"><div><p class="code">404</p><h1 class="display">This page is not in the catalogue.</h1><p>The release may have been removed, or the address may be wrong.</p>
+<div class="sh-cta"><a class="cta" href="/en/products/"><span>Browse the releases</span><svg class="arr" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4"/></svg></a><a class="tlink" href="https://www.eldovant.com/en/">Back to eldovant.com</a></div></div></section>
+<section class="void" lang="it" data-l="it"><div><p class="code">404</p><h1 class="display">Questa pagina non è nel catalogo.</h1><p>L’uscita potrebbe essere stata rimossa, oppure l’indirizzo non è corretto.</p>
+<div class="sh-cta"><a class="cta" href="/it/prodotti/"><span>Sfoglia le uscite</span><svg class="arr" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4"/></svg></a><a class="tlink" href="https://www.eldovant.com/it/">Torna a eldovant.com</a></div></div></section>
+</main>
+<script src="/shop.js" defer></script>
+</body>
+</html>

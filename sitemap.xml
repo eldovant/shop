@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://shop.eldovant.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://shop.eldovant.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://shop.eldovant.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://shop.eldovant.com/"/>
+  </url>
+  <url>
+    <loc>https://shop.eldovant.com/en/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://shop.eldovant.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://shop.eldovant.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://shop.eldovant.com/"/>
+  </url>
+  <url>
+    <loc>https://shop.eldovant.com/it/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://shop.eldovant.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://shop.eldovant.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://shop.eldovant.com/"/>
+  </url>
+  <url>
+    <loc>https://shop.eldovant.com/en/products/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://shop.eldovant.com/en/products/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://shop.eldovant.com/it/prodotti/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://shop.eldovant.com/"/>
+  </url>
+  <url>
+    <loc>https://shop.eldovant.com/it/prodotti/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://shop.eldovant.com/en/products/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://shop.eldovant.com/it/prodotti/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://shop.eldovant.com/"/>
+  </url>
+  <url>
+    <loc>https://shop.eldovant.com/en/delivery/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://shop.eldovant.com/en/delivery/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://shop.eldovant.com/it/consegna/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://shop.eldovant.com/"/>
+  </url>
+  <url>
+    <loc>https://shop.eldovant.com/it/consegna/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://shop.eldovant.com/en/delivery/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://shop.eldovant.com/it/consegna/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://shop.eldovant.com/"/>
+  </url>
+</urlset>

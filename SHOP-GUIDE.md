@@ -85,3 +85,16 @@ Lo Shop emette l'evento DOM `eld:shop` (e `dataLayer.push` se presente): `view_p
 ## 9. Come appaiono i risultati su Google
 
 Titoli nel formato "ELDOVANT Shop — Nome pagina/prodotto", breadcrumb (BreadcrumbList) su ogni pagina e `WebSite` con nome "ELDOVANT Shop" sono i segnali che controlliamo. Google decide da solo cosa mostrare (nome del sito sopra l'URL, percorso a briciole, titolo): i cambiamenti compaiono dopo una nuova scansione, in genere giorni o settimane. Dopo la pubblicazione: Search Console → Controllo URL → "Richiedi indicizzazione" per la home e le pagine principali.
+
+## 10. "Errore di reindirizzamento" e nome del sito su Google
+
+**Corretto nel codice**: la root aveva, oltre al redirect JavaScript, un `<noscript>` con meta refresh che qualunque crawler leggeva come redirect per tutti; rimosso (senza JavaScript restano i link reali a English/Italiano). L'esclusione dei crawler ora copre anche Google-InspectionTool, Bing, Yandex, ecc. La root non è più nella sitemap (è solo il punto d'ingresso/x-default; la sitemap elenca solo le pagine reali /en/ e /it/). La build si ferma se il problema si ripresenta.
+
+**Fuori dal codice**: ciclo di redirect di hosting/DNS. Controlla:
+
+    curl -sIL -A "Googlebot" http://shop.eldovant.com/ | grep -iE "^HTTP|^location"
+    curl -sIL -A "Googlebot" https://shop.eldovant.com/en/ | grep -iE "^HTTP|^location"
+
+Corretto: al massimo `301 → https://shop.eldovant.com/…` e poi `200`. Nel DNS `shop` deve essere un CNAME verso `eldovant.github.io` (senza proxy Cloudflare in modalità "Flexible"), nessun inoltro del registrar, e in GitHub → Settings → Pages dominio `shop.eldovant.com` con **Enforce HTTPS**. Poi, in Search Console, "Convalida correzione".
+
+**Nome del sito** ("ELDOVANT Shop" al posto di "shop.eldovant.com"): viene dal markup `WebSite` della home dello Shop (già presente, coerente con titolo e `og:site_name`). Google lo applica quando la home è scansionabile senza errori; richiede settimane e non è forzabile.

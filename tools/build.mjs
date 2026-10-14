@@ -777,7 +777,7 @@ ${jsonLd(siteLd())}
    The links below are real links: this page also works without JavaScript. */
 (function(){
   /* Search-engine and link-preview crawlers are never redirected: they read this page as it is and follow the real /en/ and /it/ links. */
-  var ua=navigator.userAgent||''; if(/bot|crawl|spider|slurp|mediapartners|facebookexternalhit|embedly|preview|lighthouse|headless/i.test(ua)) return;
+  var ua=navigator.userAgent||''; if(/bot|crawl|spider|slurp|google|bing|yandex|baidu|duckduck|yahoo|seznam|naver|applebot|petalbot|ahrefs|semrush|facebookexternalhit|twitter|linkedin|whatsapp|telegram|slackbot|discord|embedly|preview|lighthouse|pagespeed|inspection|gtmetrix|headless|phantom/i.test(ua)) return;
   try{
     var lang=null;
     try{ var s=localStorage.getItem('eld-lang'); if(s==='it'||s==='en') lang=s; }catch(e){}
@@ -789,7 +789,6 @@ ${jsonLd(siteLd())}
   }catch(e){}
 })();
 </script>
-<noscript><meta http-equiv="refresh" content="0;url=/en/"></noscript>
 </head>
 <body>
 <main>
@@ -823,7 +822,8 @@ function generate() {
 }
 
 function sitemap(list) {
-  const urls = [{ loc: SITE + '/', alts: { en: abs('/en/'), it: abs('/it/') }, xdef: SITE + '/' }];
+  /* the root is a language entry point (x-default), not a page to submit: only real /en/ and /it/ pages are listed */
+  const urls = [];
   const seen = new Set();
   list.filter(x => x.indexable && x.alts).forEach(x => {
     LANGS.forEach(l => {
@@ -895,6 +895,11 @@ function audit(list) {
       });
       if (hl['x-default'] !== SITE + '/') errs.push(`${where}: x-default must be the root`);
       if (/location\.(replace|href)\s*=|http-equiv="refresh"/.test(html)) errs.push(`${where}: localized page must not redirect`);
+    }
+    if (x.path === 'index.html') {
+      if (/http-equiv="refresh"/i.test(html)) errs.push(`${where}: root must not contain a meta refresh (crawlers would see a redirect)`);
+      if (!/google\|bing/.test(html)) errs.push(`${where}: root redirect must skip search-engine crawlers`);
+      if ((html.match(/location\.replace/g) || []).length !== 1) errs.push(`${where}: root must have exactly one JS redirect`);
     }
     if (x.indexable === false && x.path !== '404.html' && !/noindex/.test(html)) errs.push(`${where}: should be noindex`);
     [...html.matchAll(/<script type="application\/ld\+json">([^<]*)<\/script>/g)].forEach(m => { try { JSON.parse(m[1]); } catch { errs.push(`${where}: invalid JSON-LD`); } });

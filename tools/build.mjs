@@ -74,6 +74,7 @@ function fail(m) { console.error('\n✖ ' + m + '\n'); process.exit(1); }
       if (!['audio', 'video'].includes(p.preview.type)) errs.push(`${w}: preview.type must be audio | video`);
       need(p.preview, 'src', w + '.preview');
     }
+    if (p.trial) { need(p.trial, 'href', w + '.trial'); bi(p.trial.title, w + '.trial.title'); bi(p.trial.text, w + '.trial.text'); bi(p.trial.label, w + '.trial.label'); }
     if (p.featured && PRODUCTS.filter(x => x.featured).length > 1) errs.push(`${w}: only one product can be featured`);
   });
   if (errs.length) fail('shop-data.js has problems:\n  - ' + errs.join('\n  - '));
@@ -408,8 +409,10 @@ ${footerHtml(l, st)}
 /* ==========================================================================
    Parts
    ========================================================================== */
-const orgLd = () => ({ '@context': 'https://schema.org', '@type': 'Organization', name: 'ELDOVANT', url: MAIN + '/', logo: MAIN + '/apple-touch-icon.png', slogan: 'Original Motion Pictures & Music', sameAs: C.social || [] });
-const siteLd = () => ({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'ELDOVANT Shop', url: SITE + '/', inLanguage: LANGS, publisher: { '@type': 'Organization', name: 'ELDOVANT', url: MAIN + '/' } });
+const orgLd = () => ({ '@context': 'https://schema.org', '@type': 'Organization', '@id': MAIN + '/#organization', name: 'ELDOVANT', alternateName: ['Eldovant'], url: MAIN + '/', logo: MAIN + '/apple-touch-icon.png', slogan: 'Original Motion Pictures & Music', sameAs: C.social || [] });
+/* Site name (Google) of the shop SUBDOMAIN: one WebSite node on the subdomain home page (root, /en/, /it/ carry the same node).
+   Same pattern as the main site: name + alternateName in order of preference; no lowercase domain (it is Google's "backup" and would show the domain). */
+const siteLd = () => ({ '@context': 'https://schema.org', '@type': 'WebSite', '@id': SITE + '/#website', name: 'ELDOVANT Shop', alternateName: ['Eldovant Shop', 'ELDOVANT'], url: SITE + '/', inLanguage: LANGS, publisher: { '@id': MAIN + '/#organization' } });
 const crumbLd = (items) => ({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, name: it[0], item: abs(it[1]) })) });
 
 const artImg = (p, l, { eager = false, sizes } = {}) => `<img src="/${esc(p.cover.src)}" alt="${esc(p.cover.alt[l])}" width="${p.cover.width}" height="${p.cover.height}"${eager ? ' fetchpriority="high"' : ' loading="lazy" decoding="async"'}${sizes ? ` sizes="${sizes}"` : ''}>`;
@@ -566,6 +569,7 @@ function productPage(p, l) {
       <p class="tag">${esc(p.tagline[l])}</p>
       ${buyBlock(p, l)}
     <section class="pd-sec" aria-labelledby="hOv"><h2 id="hOv">${esc(pd.overview)}</h2><div class="prose">${p.overview[l].map(t => `<p>${esc(t)}</p>`).join('')}</div></section>
+    ${p.trial ? `<section class="pd-sec" aria-labelledby="hTr"><h2 id="hTr">${esc(p.trial.title[l])}</h2><div class="pv"><p>${esc(p.trial.text[l])}</p><p><a class="cta ghost" href="/${esc(p.trial.href)}" download>${esc(p.trial.label[l])}</a></p></div></section>` : ''}
     ${previewHtml(p, l)}
     ${p.includes && p.includes[l].length ? `<section class="pd-sec" aria-labelledby="hIn"><h2 id="hIn">${esc(pd.includes)}</h2><ul class="inc">${p.includes[l].map(t => `<li>${esc(t)}</li>`).join('')}</ul></section>` : ''}
     ${alt.length || p.releaseDate ? `<section class="pd-sec" aria-labelledby="hTe"><h2 id="hTe">${esc(pd.details)}</h2><dl class="spec">${alt.map(d => `<div><dt>${esc(d.k[l])}</dt><dd>${esc(d.v[l])}</dd></div>`).join('')}${p.releaseDate ? `<div><dt>${esc(pd.releaseDate)}</dt><dd>${esc(dateFmt(p.releaseDate, l))}</dd></div>` : ''}</dl></section>` : ''}
@@ -735,7 +739,7 @@ function rootPage() {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ELDOVANT Shop — Original Motion Pictures &amp; Music</title>
-<meta name="description" content="The official ELDOVANT shop. English and Italian editions.">
+<meta name="description" content="The official ELDOVANT shop: digital releases of original films and music.">
 <!-- build:seo:start -->
 <link rel="canonical" href="${SITE}/">
 <link rel="alternate" hreflang="en" href="${abs('/en/')}">
@@ -744,7 +748,7 @@ function rootPage() {
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ELDOVANT Shop">
 <meta property="og:title" content="ELDOVANT Shop — Original Motion Pictures &amp; Music">
-<meta property="og:description" content="The official ELDOVANT shop. English and Italian editions.">
+<meta property="og:description" content="The official ELDOVANT shop: digital releases of original films and music.">
 <meta property="og:url" content="${SITE}/">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="it_IT">
@@ -764,7 +768,7 @@ ${jsonLd(siteLd())}
 <style>
   body{margin:0;min-height:100svh;display:grid;place-items:center;background:#070605;color:#ece5d3;font:400 16px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;text-align:center}
   main{display:grid;gap:18px;padding:32px}
-  h1{margin:0;font:300 clamp(1.6rem,6vw,2.6rem)/1.1 Georgia,'Times New Roman',serif;letter-spacing:.42em;padding-left:.42em}
+  h1{margin:0;font:300 clamp(1.25rem,5vw,2.4rem)/1.1 Georgia,'Times New Roman',serif;letter-spacing:.34em;padding-left:.34em;overflow-wrap:anywhere}
   p{margin:0;color:#a89d89}
   nav{display:flex;gap:28px;justify-content:center;margin-top:8px}
   a{color:#f1d48f;text-decoration:none;border-bottom:1px solid rgba(241,212,143,.4);padding-bottom:4px}
@@ -792,8 +796,9 @@ ${jsonLd(siteLd())}
 </head>
 <body>
 <main>
-  <h1>ELDOVANT</h1>
-  <p>Shop · Original Motion Pictures &amp; Music</p>
+  <h1>ELDOVANT Shop</h1>
+  <p>Original Motion Pictures &amp; Music</p>
+  <p>The official ELDOVANT shop: digital releases of original films and music. · Lo shop ufficiale di ELDOVANT: uscite digitali di film e musica originali.</p>
   <nav aria-label="Language"><a href="/en/" hreflang="en" lang="en">English</a><a href="/it/" hreflang="it" lang="it">Italiano</a></nav>
 </main>
 </body>
@@ -822,8 +827,8 @@ function generate() {
 }
 
 function sitemap(list) {
-  /* the root is a language entry point (x-default), not a page to submit: only real /en/ and /it/ pages are listed */
-  const urls = [];
+  /* the root is the subdomain home page (x-default, where Google reads the site name): listed too, with the same language cluster */
+  const urls = [{ loc: SITE + '/', alts: { en: abs('/en/'), it: abs('/it/') }, xdef: SITE + '/' }];
   const seen = new Set();
   list.filter(x => x.indexable && x.alts).forEach(x => {
     LANGS.forEach(l => {
